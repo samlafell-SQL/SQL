@@ -1,0 +1,37 @@
+/* Using a Noncorrelated Subquery (SQLite): #
+Find all movies that are NOT one of the following genre categories:# 
+#• 'Comedy','Comedy/Drama','Exercise','Fantasy','Foreign','Animation','#
+#Horror','TV Classics','VAR','War'#
+#• Display only the movie name */
+
+/* • Order the report by descending movie name#
+#What is the value of Movie_Name in the 17th observation on the report? */
+
+SELECT m.movie_name
+FROM practice.movies AS m
+WHERE genre_id IN (SELECT id FROM practice.genres WHERE genre NOT IN 
+('Comedy','Comedy/Drama','Exercise','Fantasy','Foreign','Animation','
+Horror','TV Classics','VAR','War'))
+ORDER BY m.movie_name DESC;
+
+-- jOBS
+
+
+
+/* 4. Using a Noncorrelated Subquery + Join (SQLite):#
+#Find the names of the people who own the following movies:#
+#• Movie_ID = '20372','8727','31670' #
+#• Note that in the table people_movies, the column ID refers to the ID#
+#of the table, and person_id refers to the ID of the person.#
+#• Order the report by ascending person name#
+#What is the value of name in the first observation on the report? */
+
+SELECT name, person_id, movie_id
+FROM (SELECT * 
+     FROM practice.people_movies AS pm,
+     practice.people AS p
+     WHERE pm.person_id=p.id) AS ppm
+WHERE movie_id IN ('20372','8727','31670')
+ORDER BY name;
+
+-- Ann Worthington

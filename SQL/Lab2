@@ -1,0 +1,23 @@
+select m.movie_name, s.studio_name
+from practice.movies as m, practice.studios as s
+where m.studio_id = s.id;
+
+select m.movie_name, g.genre
+from practice.movies as m, practice.genres as g
+where m.id=g.id;
+
+
+select m.id, p.id, p.person_id, p.movie_id
+from practice.people as p, practice.movies as m, practice.people_movies as pm
+where p.movie_id=m.id AND pm.person_id=p.id;
+
+select p.name, m.movie_name
+from practice.people as p, practice.movies as m, practice.people_movies as pm
+where pm.movie_id=m.id AND pm.person_id=p.id
+order by p.name asc;
+
+select p.name, m.movie_name, count(*) as Count
+from practice.people as p, practice.movies as m, practice.people_movies as pm
+where pm.movie_id=m.id AND pm.person_id=p.id
+group by p.name
+order by Count desc;
