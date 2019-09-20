@@ -1,0 +1,99 @@
+/* How many customers are in the Customer table? */
+SELECT count(*) AS Count
+FROM Test.Customer;
+
+/* How many Customers live in London? */
+SELECT count(*) AS Count
+FROM Test.Customer
+WHERE City like "London";
+
+/* How many customers have gmail addresses? */
+SELECT count(*) AS Count
+FROM Test.Customer
+WHERE Email like "%gmail.com";
+
+/* Create a Report to find all albums whose Title
+starts with the letter K. List AlbumID and Title.
+Order by desc AlbumID. */
+SELECT AlbumId, Title
+FROM Test.Album
+WHERE Title like "K%"
+ORDER BY AlbumId desc;
+
+/* Create a Report to find all albums whose Title
+starts with the letter "M". List their AlbumID,
+Title, and Artist Name. Order by AlbumID desc. */
+SELECT al.AlbumId, al.Title, ar.Name
+FROM Test.Album AS al
+INNER JOIN Test.Artist AS ar ON al.ArtistId=ar.ArtistId
+WHERE al.Title like "M%"
+ORDER BY al.AlbumId desc;
+
+/* Using the Track Table, provide a report that
+lists the average UnitPrice for each GenreId.
+List the genreId in desc order. */
+SELECT GenreId, avg(UnitPrice) AS Average_Unit_Price
+FROM Test.Track
+GROUP BY GenreId
+ORDER BY GenreId desc;
+
+/* List the cities where either a customer or an
+employee lives. Remember to remove duplicates. */
+SELECT City
+FROM Test.Customer
+UNION
+SELECT City
+FROM Test.Employee3;
+
+/* Provide the count of cities where either a customer
+or an employee lives*/
+SELECT count(*) AS Count
+FROM (SELECT City
+FROM Test.Customer
+UNION
+SELECT City
+FROM Test.Employee3) AS temp;
+
+/* using the Invoice Table, provide a report that
+lists BillingCity and the average of Total for each
+Billing City. However, only list those billing cities
+whose average of Total are higher than 6. */
+SELECT BillingCity, avg(Total) AS Average
+FROM Test.Invoice
+GROUP BY BillingCity
+HAVING Average > 6;
+
+/* Using the Invoice Table, provide a report that lists
+BillingCity and the average of Total for Each city.
+However, only list those Billing Cities whose average
+of Total are higher than the average of Total
+of the entire invoice table. */
+SELECT BillingCity, avg(Total) AS Average_Total
+FROM Test.Invoice
+GROUP BY BillingCity
+HAVING avg(Total) > (SELECT avg(Total)
+                    FROM Test.Invoice);
+                    
+
+/* Provide a report that lists the artist name and the count
+of albums per artist. Provide the count of albums in
+descending order. */
+SELECT ar.Name, count(al.AlbumId) AS Album_Count
+FROM Test.Artist AS ar
+INNER JOIN Test.Album AS al ON ar.ArtistId=al.ArtistID
+GROUP BY al.ArtistId
+ORDER BY Album_Count desc;
+
+/* Using the Track, Genre, and MediaType tables,
+create a new table called Test.All_Data that lists
+Track Name, Genre Name, and the MediaType name.
+Order by desc Track Name. */
+CREATE TABLE Test.All_Data AS
+SELECT tr.Name AS Track_Name, g.Name AS Genre_Name, m.Name AS Media_Type_Name
+FROM Test.Track AS tr, Test.Genre AS g, Test.MediaType AS m
+WHERE m.MediaTypeId=tr.MediaTypeId AND tr.GenreId=g.GenreId
+ORDER BY Track_Name desc;
+
+/* Insert a new Artist, named "It Depends Music" with ID=277 into the artist table... */
+INSERT INTO Test.Artist (Name, ArtistId)
+VALUES ("It Depends Music", "277");
